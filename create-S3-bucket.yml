@@ -1,0 +1,29 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: Create S3 bucket
+      amazon.aws.s3_bucket:
+        name: "{{ bucket_name }}"
+        state: present
+        region: "us-east-1"
+        versioning: true
+        encryption: "AES256"
+        public_access:
+          block_public_acls: true
+          block_public_policy: true
+          ignore_public_acls: true
+          restrict_public_buckets: true
+        tags:
+          created_by: "{{ created_by }}"
+          Owner: "{{ Owner }}"
+          App_Name: "{{ App_Name }}"
+          Cost_Center: "{{ Cost_Center }}"
+          Business_Unit: "{{ Business_Unit }}"
+      register: s3
+
+    - debug:
+        msg: "{{ s3 }}"
+
